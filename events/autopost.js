@@ -1,22 +1,22 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const cron = require('node-cron');
+
+let isPosting = false;
 
 module.exports = {
     name: "autopost",
-    description: "Automatically posts a random dog image immediately and then every hour.",
+    description: "Automatically posts a random dog image every 35 minutes.",
     nashPrefix: false,
     version: "1.0.0",
     role: "admin",
     cooldowns: 5,
-    async execute(api, event) {
-        const { threadID } = event;
-        let isActive = false;
-
+    async onEvent({ api }) {
         const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 
         const downloadImage = async (url) => {
-            const imagePath = path.join(__dirname, 'tempImage.jpg');
+            const imagePath = path.join(__dirname, 'dog.jpg');
             const response = await axios({
                 method: 'GET',
                 url,
@@ -31,6 +31,9 @@ module.exports = {
         };
 
         const postImage = async () => {
+            if (isPosting) return; 
+            isPosting = true;
+
             try {
                 let imageUrl;
                 let attempts = 0;
@@ -54,29 +57,14 @@ module.exports = {
 
                 fs.unlinkSync(imagePath);
             } catch (error) {
+                console.error('Error posting image:', error);
+            } finally {
+                isPosting = false; 
             }
         };
 
-        const startAutoPost = () => {
-            isActive = true;
+        cron.schedule('*/35 * * * *', () => {
             postImage();
-            setInterval(() => {
-                if (isActive) {
-                    postImage();
-                }
-            }, 3600000);
-            api.sendMessage("┌─[ AUTOPOST ]─────[ # ]\n└───► Auto-post is now active!", threadID);
-        };
-
-        const stopAutoPost = () => {
-            isActive = false;
-            api.sendMessage("┌─[ AUTOPOST ]─────[ # ]\n└───► Auto-post has been stopped!", threadID);
-        };
-
-        if (event.body.toLowerCase() === 'autopost on') {
-            startAutoPost();
-        } else if (event.body.toLowerCase() === 'autopost off') {
-            stopAutoPost();
-        }
+        });
     },
 };

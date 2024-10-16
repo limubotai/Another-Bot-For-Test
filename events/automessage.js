@@ -1,18 +1,18 @@
 const axios = require('axios');
+const cron = require('node-cron');
+
+let isSending = false;
 
 module.exports = {
     name: "automessage",
     description: "Automatically sends a motivational quote every hour.",
     nashPrefix: false,
     version: "1.0.0",
-    role: "admin",
-    cooldowns: 5,
-    async execute(api, event) {
-        const { threadID } = event;
-
-        let isActive = false;
-
+    async onEvent({ api }) {
         const motivation = async () => {
+            if (isSending) return; 
+            isSending = true;
+
             try {
                 const response = await axios.get("https://nash-rest-api-production.up.railway.app/quote");
                 let quote = response.data.text;
@@ -32,28 +32,14 @@ module.exports = {
                     }
                 }
             } catch (error) {
+                console.error('Error fetching quote:', error);
+            } finally {
+                isSending = false; 
             }
         };
 
-        const startAutoMessage = () => {
-            isActive = true;
-            setInterval(() => {
-                if (isActive) {
-                    motivation();
-                }
-            }, 3600000);
-            api.sendMessage("┌─[ AUTOMESSAGE ]──[ # ]\n└──► Auto-message is now active!", threadID);
-        };
-
-        const stopAutoMessage = () => {
-            isActive = false;
-            api.sendMessage("┌─[ AUTOMESSAGE ]──[ # ]\n└──► Auto-message has been stopped!", threadID);
-        };
-
-        if (event.body.toLowerCase() === 'automessage on') {
-            startAutoMessage();
-        } else if (event.body.toLowerCase() === 'automessage off') {
-            stopAutoMessage();
-        }
+        cron.schedule('0 * * * *', () => {
+            motivation();
+        });
     },
 };
