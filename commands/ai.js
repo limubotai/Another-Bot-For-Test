@@ -21,12 +21,12 @@ module.exports = {
 
         api.sendMessage(
             "[ AI GPT ]\n\n" +
-            "⏳ Searching for answer...",
+            "please wait...",
             threadID,
             (err, info) => {
                 if (err) return;
                 
-                axios.get(`${global.NashBot.JOSHUA}/gpt4o?prompt=${encodeURIComponent(prompt)}`)
+                axios.get(`${global.NashBot.JOSHUA}gpt4o?prompt=${encodeURIComponent(prompt)}`)
                     .then(response => {
                         const reply = response.data.response;
                         api.editMessage(

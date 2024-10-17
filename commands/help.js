@@ -1,6 +1,6 @@
 module.exports = {
     name: "help",
-    description: "Beginner's Guide To All Bot Commands and Events",
+    description: "eyyy",
     nashPrefix: false,
     version: "1.0.2",
     role: 0,
@@ -15,56 +15,55 @@ module.exports = {
         let pageNumber = args[0] ? parseInt(args[0], 10) : 1;
         pageNumber = isNaN(pageNumber) || pageNumber < 1 ? 1 : pageNumber;
 
-        let commandList = "╔════ஜ۩۞۩ஜ═══╗\n\n";
-        commandList += `𝑯𝒆𝒓𝒆'𝒔 𝒕𝒉𝒆 𝒄𝒐𝒎𝒎𝒂𝒏𝒅 𝒍𝒊𝒔𝒕 - 𝑷𝒂𝒈𝒆 ${pageNumber}:\n\n`;
+        let commandList = "╭━━━━━༺༻━━━━━╮\n";
+     commandList += `          𝑪𝒐𝒎𝒎𝒂𝒏𝒅𝒔 𝑮𝒖𝒊𝒅𝒆\n`;
+     commandList += `                 𝑷𝒂𝒈𝒆 ${pageNumber}\n`;
+        commandList += "╰━━━━━༺༻━━━━━╯\n\n";
 
-        const aiCommands = [];
-        const otherCommands = [];
+        const allCommands = [];
         const eventEntries = Array.from(events.keys());
+
         commands.forEach((cmd, name) => {
-            if (name.toLowerCase().includes("ai")) {
-                aiCommands.push(name);
-            } else {
-                otherCommands.push(name);
-            }
+            allCommands.push(name);
         });
 
-        const allEntries = [...aiCommands, ...otherCommands, ...eventEntries];
+        const allEntries = [...allCommands, ...eventEntries];
         const startIndex = (pageNumber - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const paginatedEntries = allEntries.slice(startIndex, endIndex);
 
-        let hasListedAISection = false;
-        let hasListedOtherCommands = false;
+        let hasListedCommands = false;
+        let hasListedEvents = false;
 
         paginatedEntries.forEach(name => {
-            if (aiCommands.includes(name)) {
-                if (!hasListedAISection) {
-                    commandList += "AI Commands:\n";
-                    hasListedAISection = true;
+            if (allCommands.includes(name)) {
+                if (!hasListedCommands) {
+                    commandList += "𝑪𝒐𝒎𝒎𝒂𝒏𝒅𝒔:\n";
+                    hasListedCommands = true;
                 }
-                commandList += `❍ ${name}\n`;
-            } else if (otherCommands.includes(name)) {
-                if (!hasListedOtherCommands && hasListedAISection) {
-                    commandList += "\nOther Commands:\n";
-                    hasListedOtherCommands = true;
-                }
-                commandList += `❍ ${name}\n`;
+                commandList += `   ↳ ${name}\n`;
             } else if (eventEntries.includes(name)) {
-                if (!hasListedOtherCommands && hasListedAISection) {
-                    commandList += "\nEvent List:\n";
-                    hasListedOtherCommands = true;
+                if (!hasListedEvents && hasListedCommands) {
+                    commandList += "\n𝑬𝒗𝒆𝒏𝒕𝒔:\n";
+                    hasListedEvents = true;
                 }
-                commandList += `❍ ${name}\n`;
+                commandList += `   ↳ ${name}\n`;
             }
         });
 
         if (paginatedEntries.length < itemsPerPage && pageNumber > 1) {
-            commandList += "\nNo more commands/events.";
+            commandList += "\n  No more commands/events.";
         }
 
-        commandList += `\n\n𝑱𝒖𝒔𝒕 𝒎𝒆𝒔𝒔𝒂𝑔𝒆 𝒽𝒆𝓁𝓅 1, 2, 𝑜𝓇 3 𝓉𝑜 𝓈𝑒𝑒 𝓂𝑜𝓇𝑒 𝒸𝑜𝓂𝒶𝓃𝒹𝓈\n`;
-        commandList += `╚════ஜ۩۞۩ஜ═══╝`;
-        api.sendMessage(commandList, threadID, messageID);
-    }
+        commandList += `\n  Send 'help 1', 'help 2', etc., to see more commands.\n`;
+        commandList += "╭━━━━━━━━━━━━━━━━━╯\n";
+
+        api.sendMessage(commandList, threadID, (err, info) => {
+            if (!err && info) {
+                setTimeout(() => {
+                    api.unsendMessage(info.messageID);
+                }, 9000);
+            }
+        }, messageID);
+    },
 };
