@@ -1,18 +1,18 @@
 # Author
 
 <div align="center">
-  <img src="https://i.imgur.com/2Co5ddF.jpeg" alt="Profile Image" width="120" height="120" style="border-radius: 50%;">
+  <img src="https://i.imgur.com/7e2qY7W.jpeg" alt="Profile Image" width="120" height="120" style="border-radius: 50%;">
 </div>
 <div align="center">
-  <p><strong>Joshua Apostol</strong></p>
-</div>
-
-<div align="center">
-  <h2><strong>NASH BOT</strong></h2>
+  <p><strong>Limon Ahammed</strong></p>
 </div>
 
 <div align="center">
-  <p>Welcome to NASH BOT - your ultimate companion for managing Facebook group chats with ease!</p>
+  <h2><strong>CIKU BOT</strong></h2>
+</div>
+
+<div align="center">
+  <p>Welcome to CIKU BOT - your ultimate companion for managing Facebook group chats with ease!</p>
 </div>
 
 ## HOW TO MAKE COMMAND?
@@ -28,9 +28,6 @@ module.exports = {
   },
 };
 ```
-
-
-## Features
 
 - **Command Handling**: 
   - Supports dynamic command registration.
@@ -67,7 +64,7 @@ This project allows you to utilize the Facebook app state for your bot. Follow t
 
 ## Step 1: Download the C3C Extension
 1. **Download the C3C ZIP File**:
-   - Go to the [C3C GitHub Releases page](https://github.com/c3cbot/c3c-ufc-utility/releases/tag/2.0.1)
+   - Go to the [C3C GitHub Releases page](https://github.com/joshuaAposto/NASHBOT-V-2.4.0/releases/tag/v2.0.1)
    - Download the ZIP file of the latest release.
 
 2. **Extract the ZIP File**:
